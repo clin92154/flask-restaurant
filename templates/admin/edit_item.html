@@ -1,0 +1,113 @@
+{% extends '/sample/base.html' %} {% block content %}
+
+<div class="container text-center">
+  <div class="row m-2 justify-content-center">
+    <div class="col">
+
+      <div class="card text-center">
+        <form class="row g-0" method="POST" action="{{ url_for('edit_menu_item', item_id=item_id) }}">
+          <img class="img-fluid rounded-start card-header col-md-4"
+            id="image-preview"
+            src="image/{{item.3}}"
+            alt="Preview"
+            style="max-width: 540px;"
+            onchange
+          />
+        <div class="col-md-8">
+            <div class="card-body text-start">
+                <div class="vstack gap-3">
+                  <div class="p-2">
+                    <label for="image" class="form-label">圖片上傳</label>
+                    <input
+                      class="btn btn-outline-secondary form-control"
+                      type="file"
+                      name="image"
+                      id="image"
+                      accept="image/*"
+                      required
+                      onchange="previewImage()"
+                    />
+                  </div>
+                  <div class="p-2">
+                    <label for="category" class="form-label">餐點種類:</label>
+                    <select
+                      name="category"
+                      id="category"
+                      class="form-select"
+                      aria-label="Default select example"
+                      required
+                    >
+                      {% for category in categories%}
+                      <option value="{{category.1}}">{{category.1}}</option>
+                      {% endfor%}
+                    </select>
+                  </div>
+                  <div class="p-2">
+                    <label for="name" class="form-label">餐點名稱:</label>
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      value="{{item.2}}"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+      
+                  <div class="p-2">
+                    <label for="price" class="form-label">金額:</label>
+                    <input
+                      type="number"
+                      name="price"
+                      id="price"
+                      step="1"
+                      class="form-control"
+                      value="{{item.4}}"
+                      required
+                    />
+                  </div>
+                  <div class="p-2">
+                    <label for="description" class="form-label">餐點介紹:</label>
+                    <textarea
+                      name="description"
+                      id="description"
+                      class="form-control"
+                      rows="3"
+                      value="{{item.5}}"
+                      required
+                      onkeyup="his.value = this.innerHTML"
+                    >
+                    {{item.5}}</textarea
+                    >
+                  </div>
+                  <div class="p-2 text-end">
+                    <button type="submit" class="btn btn-secondary">儲存</button>
+                  </div>
+
+                </div>
+              </div>
+          </div>
+      </div>
+    </form>
+
+    </div>
+  </div>
+</div>
+<script>
+  function previewImage() {
+    var preview = document.getElementById("image-preview");
+    var file = document.getElementById("image").files[0];
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+      preview.src = reader.result;
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = "";
+    }
+  }
+</script>
+{% endblock content%}

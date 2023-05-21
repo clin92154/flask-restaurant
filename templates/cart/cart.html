@@ -1,0 +1,103 @@
+{% extends "base.html" %} {% block content %}
+<div class="container-lg rounded bg-light shadow-lg p-3 mb-5 bg-body-tertiary">
+<h1>訂單明細</h1>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>商品</th>
+      <th>數量</th>
+      <th class="text-center">價格</th>
+      <th class="text-center">總額</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in carts %}
+    <tr>
+      <td class="col-sm-7 col-md-6">
+        <h4 >{{item.0}}</h4>
+      </td>
+      <td class="col-sm-2 col-md-1 text-center" >
+        <form
+          action="{{ url_for('update_cart_item', cart_id=item.3 ) }}"
+          method="post"
+        >
+        <div class="row">
+          <select name="quantity" class="col-m-1 form-select">
+            {% for num in range(1,10)%} {% if num == item.1%}
+            <option value="{{item.1}}" selected>{{item.1}}</option>
+            {%else%}
+            <option value="{{num}}">{{num}}</option>
+            {%endif%}
+
+            {%endfor%}
+          </select>
+          <input type="hidden" name="page" value="for_order" />
+
+          <button type="submit" class="col-m-1 btn btn-success btn-product">
+            更新
+          </button>
+        </div>
+         
+        </form>
+      </td>
+      <td class="col-sm-1 col-md-1 text-center">
+        <strong>${{item.2}}</strong>
+      </td>
+      <td class="col-sm-1 col-md-1 text-center">
+        <strong>${{ item.2*item.1 }}</strong>
+      </td>
+
+      <td class="col-sm-1 col-md-1">
+        <form
+          action="{{ url_for('delete_cart_item', cart_id=item.3) }}"
+          method="POST"
+        >
+          <button
+            class="btn btn-danger"
+            type="submit"
+            name="page" value="for_order"/>
+            刪除
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td><h3>合計</h3></td>
+      <td class="text-right">
+        <h3><strong>${{total}}</strong></h3>
+      </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>
+        <a href="{{url_for('home')}}" class="btn btn-default">
+          繼續購物<i
+            class="glyphicon glyphicon-shopping-cart"
+            aria-hidden="true"
+          ></i>
+        </a>
+      </td>
+      <td>
+        {% if request.cookies.get('user_phone') %}
+          <a href="{{url_for('cart_to_order' , phone =request.cookies.get('user_phone') )}}" class="btn btn-default"
+          >購買<i class="glyphicon glyphicon-play" aria-hidden="true"></i>
+          </a>
+        {% else %}
+         <a href="{{url_for('login' , status="to_order")}}" class="btn btn-default"
+          >購買<i class="glyphicon glyphicon-play" aria-hidden="true"></i>
+         </a>
+        {% endif %}
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endblock content %}

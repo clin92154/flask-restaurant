@@ -1,0 +1,73 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-2"></div>
+  <div class="col-8">
+    <!--訂單編輯-->
+    <div class="card">
+      <div class="card-body text-start">
+        <h5 class="card-title">訂單成立!!</h5>
+        <p class="card-text">
+            <div class="col justify-content-start">
+                <div class="col-6">
+                  訂單編號:#{{ order_number }}
+                  
+                </div>
+                <div class="col-6">
+                  會員名稱:{{ username }}
+                </div>                
+                <div class="col-6">
+                  連絡電話: {{ phone }}
+                </div>                
+                <div class="col-6">
+                  成立時間:{{ timestamp| custom_datetimeformat }}
+                </div>
+            </div>
+        </p>
+
+        <h6 class="card-subtitle mb-2 text-body-secondary">訂單餐點</h6>
+        <div class="card-text">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">餐點</th>
+                    <th scope="col">數量</th>
+                    <th scope="col">金額</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in items %}
+                  <tr>
+                    <th scope="row">{{ item[0] }}</th>
+                    <td>
+                      {{item[2] }}
+                    </td>
+                    <td>{{ item[1]*item[2]}}</td>
+
+                  </tr>
+                  {% endfor %}
+                  <tr>
+
+                    <td>
+                        <h1>總額:$ {{ total_price }}</h1>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+        <div class="row justify-content-end">
+            <div class="col-4">
+                <a href="" class="btn btn-outline-secondary card-link">歷史紀錄</a>
+                <a href="{{url_for('home')}}" class="btn btn-secondary card-link">回首頁</a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <!--訂單編輯-->
+  </div>
+  <div class="col-2"></div>
+</div>
+{% endblock content%}
+
+

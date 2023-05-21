@@ -1,0 +1,59 @@
+{% extends "base.html" %}{% block content %}
+
+<div class="container text-center">
+  <div class="row justify-content-md-center align-items-center">
+    <div class="col-6">
+      <div class="card text-center">
+        <div class="card-header">註冊會員</div>
+        <div class="card-body">
+          <form method="POST" action="{{url_for('register')}}">
+            <div class="form-floating mb-3">
+              <input
+                id="username"
+                name="username"
+                class="form-control"
+                type="text"
+                placeholder="Default input"
+                aria-label="default input example"
+              />
+              <label for="floatingInput" class="form-label">會員名稱</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input
+                type="tel"
+                class="form-control"
+                id="floatingInput"
+                name="phone"
+                placeholder="09123456778"
+                pattern="09[0-9]{8}"
+                required
+              />
+              <label for="floatingInput">手機號碼</label>
+            </div>
+            <div class="form-floating">
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                id="floatingPassword"
+                placeholder="Password"
+              />
+              <label for="floatingPassword">密碼</label>
+            </div>
+
+            <button
+              style="margin-top: 20px"
+              type="submit"
+              class="btn btn-primary"
+            >
+              送出
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

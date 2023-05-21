@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block content %}
+<div class="row">
+  {% for order in orders %}
+  <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+    <div class="card shadow-lg p-3 mb-5 bg-body-tertiary">
+      <div class="card-body">
+        <h5 class="card-title">訂單編號: #{{ order[0] }}</h5>
+        <p class="card-text">總額: ${{ order[1] }}</p>
+        <p class="card-text">
+          成立時間: <br />{{ order[2] | custom_datetimeformat }}
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

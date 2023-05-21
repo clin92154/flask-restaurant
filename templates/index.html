@@ -1,0 +1,152 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container-lg text-center">
+  <div class="row align-items-center">
+    <div class="col-md-3 align-items-top">
+      <!--list-->
+      <div
+        class="list-group list-group-flush list-group-item-action shadow-sm mb-5 bg-body rounded"
+      >
+        <a
+          href="{{url_for('home')}}"
+          class="list-group-item list-group-item-action active"
+          aria-current="true"
+        >
+          全部餐點
+        </a>
+        {%for category in categories%}
+
+        <a
+          href="/{{category.0}}"
+          class="list-group-item list-group-item-action {%if selected_category== category.0%}active{%endif%}"
+          aria-current="true"
+        >
+          {{category.0}}
+        </a>
+
+        {%endfor%} {%if cart_items%}
+        <button
+          type="button"
+          class="list-group-item list-group-item-action"
+          data-bs-toggle="collapse"
+          href="#cart"
+          role="button"
+          aria-expanded="false"
+          aria-controls="collapseExample"
+        >
+          清單
+        </button>
+        {% endif%}
+      </div>
+      <!--list-->
+    </div>
+
+    <div class="col-md-1"></div>
+    <!--餐點頁面-->
+    <div class="col-md-8">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          {% if selected_category == 'all'%}
+          <li class="breadcrumb-item">
+            <a href="{{url_for('home')}}">全部餐點</a>
+          </li>
+          {%else%}
+          <li class="breadcrumb-item">
+            <a href="{{url_for('home')}}">全部餐點</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{selected_category}}
+          </li>
+          {%endif%}
+        </ol>
+      </nav>
+
+      <div class="row g-3 align-items-center row-cols-3">
+        <div class="collapse col-12" id="cart">
+          <!--訂單-->
+          <div class="card">
+            <div class="card-title">點餐列表</div>
+            <div class="card-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">餐點</th>
+                    <th scope="col">數量</th>
+                    <th scope="col">金額</th>
+                    <th scope="col">刪除</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in cart_items %}
+                  <tr>
+                    <th scope="col">{{item.0}}</th>
+                    <th scope="col">{{item.1}}</th>
+                    <th scope="col">{{item.2}}</th>
+                    <th scope="col">
+                      <form
+                        action="{{ url_for('delete_cart_item', cart_id=item.3) }}"
+                        method="POST"
+                      >
+                        <input type="hidden" name="page" value="home" />
+                        <button class="btn btn-danger" type="submit">
+                          刪除
+                        </button>
+                      </form>
+                    </th>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <a href="{{ url_for('cart_detail') }}" class="btn btn-primary"
+                >購物車</a
+              >
+            </div>
+          </div>
+          <!--訂單-->
+        </div>
+        {% for item in menu_items %}
+
+        <div class="col">
+          <div class="card shadow-sm bg-body rounded">
+            <img
+              src="{{item.3}}"
+              style="height: 8rem"
+              class="card-img-top"
+              alt="{{item.2}}"
+            />
+            <div class="card-body">
+              <div class="card-title">{{item.2}}　　${{item.4}}</div>
+              <p class="card-text">{{item.5}}</p>
+              <form action="{{ url_for('add_to_cart') }}" method="POST">
+                <div class="row">
+                  <div class="col-md-3">
+                    <select
+                      class="form-select"
+                      name="quantity"
+                      style="width: 4rem"
+                    >
+                      <option value="0" selected>0</option>
+                      {% for num in range(1, 10) %}
+                      <option value="{{ num }}">{{ num }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <input type="hidden" name="item_id" value="{{ item.0 }}" />
+
+                  <div class="col-md-9">
+                    <button type="submit" class="btn btn-primary">
+                      加入清單
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!--餐點頁面-->
+  </div>
+</div>
+{% endblock content%}

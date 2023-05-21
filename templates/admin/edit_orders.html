@@ -1,0 +1,117 @@
+{% extends '/sample/base.html' %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-2"></div>
+  <div class="col-8">
+    <!--訂單編輯-->
+    <div class="card">
+      <div class="card-body text-start">
+        <h5 class="card-title">訂單資訊</h5>
+        <p class="card-text">
+            <div class="col justify-content-start">
+                <div class="col-6">
+                  訂單編號:#{{ order_id }}
+                  
+                </div>
+                <div class="col-6">
+                  會員名稱:{{ username }}
+                </div>                
+                <div class="col-6">
+                  連絡電話: {{ phone }}
+                </div>                
+                <div class="col-6">
+                  成立時間:{{ timestamp| custom_datetimeformat }}
+                </div>
+            </div>
+        </p>
+
+        <h6 class="card-subtitle mb-2 text-body-secondary">訂單餐點</h6>
+        <div class="card-text">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">餐點</th>
+                    <th scope="col"></th>
+                    <th scope="col">數量</th>
+                    <th scope="col">金額</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                  <tr>
+                    <th scope="row">{{item.1}}</th>
+                    <td></td>
+                    <td>
+                        <form
+                        action="{{ url_for('update_cart_item', cart_id=item.0 ) }}"
+                        method="post"
+                      >
+                        <select name="quantity" class="form-select" style="width:4rem">
+                          {% for num in range(1,10)%} 
+                          {% if num == item.2%}
+                          <option value="{{item.2}}" selected>{{item.2}}</option>
+                          {%else%}
+                          <option value="{{num}}">{{num}}</option>
+                          {%endif%}
+                          {%endfor%}
+                        </select>
+                        <input type="hidden" name="page" value="{{ order_id }}" />
+                        <button type="submit" class="btn btn-success btn-product">
+                          更新
+                        </button>
+                      </form>
+                    </td>
+                    <td>{{item.2 * item.3}}</td>
+                    <td>
+                        <form
+                        action="{{ url_for('delete_cart_item', cart_id=item.0) }}"
+                        method="POST"
+                      >
+                      
+                        <button
+                          class="btn btn-danger"
+                          type="submit"
+                          name="page" value="{{ order_id }}" />
+                          刪除
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  <tr>
+                    <td>
+                    </td>
+                    <td>
+                    </td> 
+                    <td>
+                    </td> 
+                    <td>
+                        <h1>總額:</h1>
+                    </td>
+                    <td>
+                        <h4>${{total}}</h4>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+        <div class="row justify-content-end">
+ 
+            <div class="col-3">
+            </div>
+            <div class="col-4">
+                <a href="{{url_for('delete_order',order_id=order_id)}}" class="btn btn-outline-secondary card-link">刪除訂單</a>
+                <a href="{{url_for('manage_orders')}}" class="btn btn-secondary card-link">儲存</a>
+            </div>
+        </div>
+        
+
+      </div>
+    </div>
+    <!--訂單編輯-->
+  </div>
+  <div class="col-2"></div>
+</div>
+{% endblock content%}
