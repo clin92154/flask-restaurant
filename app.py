@@ -14,7 +14,7 @@ conn = sqlite3.connect('database.db')
 環境設定
 """
 app.templates_auto_reload = True 
-app.config['UPLOAD_FOLDER'] = '/static/images'  # 设置图像上传的文件夹路径
+app.config['UPLOAD_FOLDER'] = '/static/images' #路徑建置
 
 
 """
@@ -74,7 +74,7 @@ def order_history():
     print(phone,user_id[0])
 
     try:
-        # 获取当前用户的历史订单
+        # 歷史訂單
         cursor.execute('SELECT orders.id, SUM(carts.quantity * menu_items.price), orders.timestamp , carts.quantity , menu_items.name , menu_items.price  FROM orders INNER JOIN carts ON orders.table_id = carts.table_id INNER JOIN menu_items ON carts.item_id = menu_items.id WHERE orders.user_id = ? GROUP BY orders.id', (user_id[0],))
         orders = cursor.fetchall()
         conn.close()
@@ -131,7 +131,7 @@ def add_to_cart():
 """
 購物車
 """
-# 在 app.py 中新增顯示購物車訂單的路由和函式
+# 顯示購物車
 def show_cart():
     conn = create_connection()
     cursor = conn.cursor()
@@ -175,11 +175,9 @@ def cart_to_order(phone):
 @app.route('/delete_cart_item/<cart_id>', methods=['POST'])
 def delete_cart_item(cart_id,page='home'):
     
-    # 在此處實作刪除購物車項目的邏輯
+    # 刪除餐點
     conn = create_connection()
     cursor = conn.cursor()
-
-    # 執行SQL語句刪除項目
 
     cursor.execute("DELETE FROM carts WHERE id = ?",(cart_id,))
 
