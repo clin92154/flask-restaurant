@@ -1,7 +1,7 @@
 from flask import *
 import sqlite3
 from lib import *
-import datetime ,os
+import  os
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
@@ -252,7 +252,7 @@ def create_order_cart(phone):
             for cart in carts:
                 print("顯示訂單資料")
 
-            timestamp = datetime.datetime.now()
+            timestamp = datetime.now()
             # 創建訂單
             cursor.execute('INSERT INTO orders (table_id,user_id, timestamp) VALUES (?, ?, ?)', (cart[4],user_id, timestamp))
                 # 執行其他相應的操作，如更新庫存等
@@ -332,7 +332,7 @@ def created_order(order_id):
     conn.close()
 
     # 渲染模板并传递数据
-    return render_template('order.html', order_number=order_id, username=user[0], phone=user[1], items=cart_items, total_price=total_price)
+    return render_template('order.html', order_number=order, username=user[0], phone=user[1], items=cart_items, total_price=total_price)
 
 
 
@@ -375,6 +375,8 @@ def add_menu_item():
 """
 @app.route('/delete_menu_item/<item_id>', methods=['POST'])
 def delete_menu_item(item_id):
+
+
     conn = create_connection()
     cursor = conn.cursor()
     # 執行刪除操作
@@ -393,17 +395,25 @@ def delete_menu_item(item_id):
 def edit_menu_item(item_id):
     if request.method == 'POST':
         # 從表單中獲取修改後的餐點資料
+        
+        file = request.files['image']
+        if file:
+            filename = secure_filename(file.filename)
+            print(filename)
+            file_path = f".{app.config['UPLOAD_FOLDER']}/{filename}"
+            file.save(file_path)
         name = request.form['name']
         category = request.form['category']
         price = request.form['price']
         description = request.form['description']
+        image = file_path
 
         # 連接到 SQLite 資料庫
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
 
         # 更新資料庫中對應的餐點資料
-        cursor.execute("UPDATE menu_items SET name=?, categories=?, price=?, description=? WHERE id=?", (name, category, price, description, item_id))
+        cursor.execute("UPDATE menu_items SET name=?, categories=? , image=?, price=?, description=?  WHERE id=?", (name, category, image, price, description, item_id , ))
         conn.commit()
 
         # 關閉資料庫連接
@@ -620,9 +630,6 @@ def check_user_credentials(phone, password):
         except Error as e:
             print(f'Error checking user credentials: {e}')
     return False
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

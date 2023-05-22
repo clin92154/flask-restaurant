@@ -9,7 +9,7 @@
         <p class="card-text">
             <div class="col justify-content-start">
                 <div class="col-6">
-                  訂單編號:#{{ order_number }}
+                  訂單編號:#{{ order_number[0] }}
                   
                 </div>
                 <div class="col-6">
@@ -19,7 +19,7 @@
                   連絡電話: {{ phone }}
                 </div>                
                 <div class="col-6">
-                  成立時間:{{ timestamp| custom_datetimeformat }}
+                  成立時間:{{ order_number[3]| custom_datetimeformat }}
                 </div>
             </div>
         </p>
