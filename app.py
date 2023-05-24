@@ -331,7 +331,6 @@ def created_order(order_id):
 
     conn.close()
 
-    # 渲染模板并传递数据
     return render_template('order.html', order_number=order, username=user[0], phone=user[1], items=cart_items, total_price=total_price)
 
 
@@ -469,7 +468,7 @@ def delete_order(order_id):
     cursor = conn.cursor()
 
     try:
-        # 删除订单及关联的购物车项
+        # 刪除訂單
         cursor.execute('DELETE FROM orders WHERE id = ?', (order_id,))
         cursor.execute('DELETE FROM carts WHERE table_id = ?', (order_id,))
         conn.commit()
@@ -545,15 +544,6 @@ def register():
         return redirect(url_for('login'))
     
     return render_template('register.html')
-
-
-
-# """
-# 已經登入，直接進行訂單處理
-# """
-# def user_to_order(phone):
-#     order_id = cart_to_order(phone)
-#     return redirect(url_for('created_order',order_id=order_id))
 
 
 # 登入頁面
